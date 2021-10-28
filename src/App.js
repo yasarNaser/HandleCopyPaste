@@ -1,16 +1,20 @@
 import './App.css';
-
+import { useRef } from 'react'
 function App() {
-    const handleKeyDown = (event) => {
-        // event.preventDefault();
-        let charCode = String.fromCharCode(event.which).toLowerCase();
-        if ((event.ctrlKey || event.metaKey) && charCode === 'c') {
-            event.metaKey ? console.log("Meta+C Pressed") : console.log("CTRL+C Pressed");
+    const emailRef = useRef()
+    const pswdRef = useRef()
 
-        } else if ((event.ctrlKey || event.metaKey) && charCode === 'v') {
-            event.metaKey ? console.log("Meta+V Pressed") : console.log("CTRL+V Pressed");
+    const handleCopy = (e) => {
+        emailRef.current.innerText = 'Copy is detected in email'
+    }
+    const handlePaste = (e) => {
+        if (e.target.type === "email"){
+            emailRef.current.innerText = 'Paste is detected in email'
+
+        }else{
+            pswdRef.current.innerText = 'Paste is detected in password'
+
         }
-
     }
 
     return (
@@ -20,22 +24,27 @@ function App() {
                     <p>Email</p>
                     <input
                         type="email"
-                        onKeyDown={handleKeyDown}
+                        className={'email'}
+                        onCopy={handleCopy}
+                        onPaste={handlePaste}
                     />
                 </label>
                 <label>
                     <p>Password</p>
                     <input
                         type="password"
-                        onKeyDown={handleKeyDown}
+                        className={'password'}
+                        onPaste={handlePaste}
                     />
                 </label>
                 <div>
                     <button type="submit">Submit</button>
                 </div>
             </form>
+            {emailRef && <span id = "emailDetect"  ref={emailRef}></span>} <br></br>
+            {pswdRef && <span id = "passwordDetect" ref={pswdRef}></span>}
         </div>
     );
 }
 
-export default App;
+export default App
